@@ -1,7 +1,7 @@
 
 
 # paco_stock_analyzer
-Single stock analyzer, with reccomendations to Buy, Hold or Skip
+Single stock analyzer, with recommendations to Buy, Hold or Skip
 ================================================================
 
 # 📈 Paco's Stock Studio
