@@ -1,7 +1,9 @@
-<<<<<<< HEAD
+
+
 # paco_stock_analyzer
-Single stock analyzer, with recoomendation to Buy, Hold or Skip
-=======
+Single stock analyzer, with reccomendations to Buy, Hold or Skip
+================================================================
+
 # 📈 Paco's Stock Studio
 
 A command-line tool that analyzes a single stock and produces two recommendations:
