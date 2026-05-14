@@ -1,6 +1,6 @@
 
 
-# paco_stock_analyzer
+# paco_stock_studio
 Single stock analyzer, with recommendations to Buy, Hold or Skip
 ================================================================
 
@@ -422,4 +422,3 @@ You do not need to master each step before moving on. Come back to earlier topic
 - [Real Python](https://realpython.com/) — practical, well-written tutorials on every topic above
 - [NumPy quickstart](https://numpy.org/doc/stable/user/quickstart.html) — a short intro to thinking in arrays
 - [yfinance documentation](https://ranaroussi.github.io/yfinance/) — see what data is available and how to fetch it
->>>>>>> f1eefca (First commit of my stock analyzer project)
