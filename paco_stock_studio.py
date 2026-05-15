@@ -570,9 +570,9 @@ def main():
     print(f"{'═'*w}\n")
 
     # ── Save report to text file ──────────────────────────────────────────────
-    save = input("\nSave report to a text file? [y/N]: ").strip().lower()
+    save = input("\nWould you like to save the report to a text file? [y/N]: ").strip().lower()
     if save not in ("y", "yes"):
-        print("Report not saved. Done.")
+        print("Report was not saved. Analysis is complete.")
         return
 
     today   = date.today().strftime("%Y%m%d")

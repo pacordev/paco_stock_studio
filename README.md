@@ -6,50 +6,49 @@ Single stock analyzer, with recommendations to Buy, Hold or Skip
 
 # 📈 Paco's Stock Studio
 
-A command-line tool that analyzes a single stock and produces two recommendations:
+command-line script that analyzes a single stock and produces two recommendations:
 
-- 🟢 **BUY / WATCH / SKIP** — a composite signal built from 8 weighted technical factors
-- ⏱️ **LONG / MEDIUM / SHORT hold duration** — a separate 6-factor model that estimates a reasonable holding window
+- 🟢 ** BUY / WATCH / SKIP ** — a signal built, using 8 weighted technical factors for the analysis (non traditional, considering recent price data or volume).
+- ⏱️ ** LONG / MEDIUM / SHORT hold duration ** — a separate 6-factor model to estimates a reasonable holding window.
 
-Results are printed to the terminal. At the end, the script asks whether you want to save a plain-text report file (`<TICKER>_analysis_YYYYMMDD.txt`) — type `y` to save or press Enter to skip.
+All results are printed to the terminal, to start (I like the terminal....). 
+After this, the script will ask you if you want to save the output to a txt file with the name (`<TICKER>_analysis_YYYYMMDD.txt`) — you can type `y` to save it or press Enter to skip saving the report.
 
-> ⚠️ **Disclaimer:** Stock Studio is for informational purposes only. It is not financial advice. Always do your own research before making investment decisions.
+------------------
+> ⚠️ **A very important note:** my script was created as a practice for python, based on my own knowledge on stocks investment done by myself, and should be considered for informational and educational purposes only. This is not intended to be financial advice. Always do your own research and due dilligence before making investment decisions.
+------------------
 
----
+## 🛠️ Requirements to run this script
 
-## 🛠️ Requirements
-
-Python 3.10+ is required (uses the `float | None` union type hint).
-
-Install dependencies:
-
+- Python 3.10+ is required (script uses the `float | None` union type hint).
+- Install the following libraries used (some you may already have):
 ```bash
 pip install yfinance pandas numpy tabulate
 ```
 
-| Library    | Purpose                                              |
+| Library    | What is it used for                                  |
 |------------|------------------------------------------------------|
-| `yfinance` | Fetches historical OHLCV price data and fundamentals |
-| `pandas`   | Time-series manipulation and rolling calculations    |
-| `numpy`    | Numerical operations (OBV, clipping, sign)           |
-| `tabulate` | Formats terminal and file output tables              |
+| `yfinance` | Used to fetch historical price data and fundamentals |
+| `pandas`   | Used for data manipulation and rolling calculations  |
+| `numpy`    | Used for numerical operations                        |
+| `tabulate` | Used to print terminal output with 'pretty' format   |
 
 ---
 
-## 🚀 Usage
+## 🚀 How to use/execute the script
 
 ```bash
-# Pass the ticker directly
+# on execution, pass the ticker in the command
 python3 paco_stock_studio.py AAPL
 
-# Specify a lookback period (6mo, 1y, 2y, 5y — default is 2y)
+# you can declare a a specific period for historical data (6mo, 1y, 2y, 5y — default is 2y)
 python3 paco_stock_studio.py AAPL --period 1y
 
-# Run without arguments — the script will prompt for a ticker
+# or you can execute with no arguments and the script will ask you for a ticker
 python3 paco_stock_studio.py
 ```
 
-Tickers follow Yahoo Finance conventions, so exchange suffixes work as expected:
+I follow Yahoo Finance conventions for stock ticker, so stock exchange suffixes work as expected:
 
 ```bash
 python3 paco_stock_studio.py GOOS.TO      # Toronto Stock Exchange
@@ -59,11 +58,11 @@ python3 paco_stock_studio.py 9984.T       # Tokyo Stock Exchange
 
 ---
 
-## 📄 Output
+## 📄 What is the output of the script
 
-### 🖥️ Terminal
+### 🖥️ In the Terminal
 
-Five sections are printed in sequence:
+five sections printed in sequence:
 
 ```
 ══════════════════════════════════════════════════════════
@@ -81,24 +80,24 @@ Five sections are printed in sequence:
 ══════════════════════════════════════════════════════════
 ```
 
-### 💾 Text file
+### 💾 Saving to a text file
 
-After the terminal output, the script prompts:
+After the terminal output finished, the script will ask you:
 
 ```
 Save report to a text file? [y/N]:
 ```
 
-- Type **`y`** (or `yes`) and press Enter to save an identical plain-text copy (no color codes) to the working directory as `<TICKER>_analysis_YYYYMMDD.txt` — for example `AAPL_analysis_20260512.txt`.
-- Press **Enter** (or type anything else) to skip saving and exit cleanly.
+- Type **`y`** (or `yes`) and press Enter, this will save a txt copy to the working directory as `<TICKER>_analysis_YYYYMMDD.txt` — for example `AAPL_analysis_20260512.txt`.
+- Press **Enter** or **N** (or type anything else) to skip saving and finish the analysis.
 
 ---
 
-## 🔍 Output sections explained
+## 🔍 Explanation of the different output sections (I use investopedia.com and finviz.com to learn...)
 
-### 🏢 Fundamentals
+### 🏢 Fundamentals 
 
-Static company and valuation data pulled directly from Yahoo Finance:
+Company and valuation data pulled from Yahoo Finance:
 
 | Field           | Description                              |
 |-----------------|------------------------------------------|
@@ -118,16 +117,16 @@ Static company and valuation data pulled directly from Yahoo Finance:
 
 ### 📊 Performance Metrics
 
-Calculated from historical closing prices over the selected lookback period:
+This is calculated from historical closing prices over the indicated historical period:
 
 | Field           | Description                                                          |
 |-----------------|----------------------------------------------------------------------|
 | Current Price   | Most recent closing price                                            |
-| Period          | Lookback period and number of calendar days                          |
+| Period          | Historical period based on calendar days                             |
 | Total Return    | Raw price return over the full period                                |
-| SPY Return      | S&P 500 (SPY) return over the same period for comparison             |
+| SPY Return      | S&P 500 (SPY) return over the same period,for comparison             |
 | Ann. Return     | Total return converted to a per-year CAGR figure                     |
-| Ann. Volatility | Daily return standard deviation scaled to annual (×√252)             |
+| Ann. Volatility | Daily return standard deviation scaled to annual                     |
 | Sharpe Ratio    | Excess return per unit of risk (risk-free rate: 4.5%)                |
 | Max Drawdown    | Largest peak-to-trough decline in the period                         |
 | RSI (14)        | 14-day Relative Strength Index                                       |
@@ -135,9 +134,9 @@ Calculated from historical closing prices over the selected lookback period:
 
 ---
 
-### 🛒 Buy/Skip Signal Breakdown
+### 🛒 Buy/Skip Signals (Breakdown)
 
-Eight technical signals are each scored 0–100 and then combined into a weighted composite score. The final score maps to a recommendation:
+Eight technical signals are scored 0–100, and then combined into a unique weighted score. Based on this, the final score maps to a probable recommendation:
 
 | Score    | Recommendation      |
 |----------|---------------------|
@@ -147,9 +146,9 @@ Eight technical signals are each scored 0–100 and then combined into a weighte
 
 | Signal        | Weight | What it measures                                              |
 |---------------|--------|---------------------------------------------------------------|
-| RSI           | 15%    | Momentum oscillator — oversold favors buying, overbought warns |
+| RSI           | 15%    | Momentum oscillator — oversold favors buying, overbought warns|
 | MA Trend      | 15%    | Price position relative to the 50-day and 200-day SMAs        |
-| MACD          | 10%    | EMA convergence/divergence and histogram momentum direction    |
+| MACD          | 10%    | EMA convergence/divergence and histogram momentum direction   |
 | Golden Cross  | 10%    | Whether the 50-SMA is above or below the 200-SMA              |
 | Momentum      | 15%    | Price returns over 1-month, 3-month, and 6-month windows      |
 | Sharpe        | 15%    | Risk-adjusted return quality over the lookback period         |
@@ -158,9 +157,9 @@ Eight technical signals are each scored 0–100 and then combined into a weighte
 
 ---
 
-### ⏳ Hold Duration Signal Breakdown
+### ⏳ Hold Duration Signals (Breakdown)
 
-A separate six-factor model estimates how long it is reasonable to hold the stock. Each factor is scored and combined into a weighted composite:
+Another model, based on six-factor estimates on how long it is reasonable to hold the stock. Each factor is scored and combined into a unique weighted composite:
 
 | Composite score | Hold label        | Suggested window  |
 |-----------------|-------------------|-------------------|
@@ -170,18 +169,18 @@ A separate six-factor model estimates how long it is reasonable to hold the stoc
 
 | Factor     | Weight | What it measures                                              |
 |------------|--------|---------------------------------------------------------------|
-| Volatility | 20%    | Low-volatility stocks tolerate longer holds                   |
-| Beta       | 15%    | High beta amplifies market swings, suits shorter cycles       |
-| Sharpe     | 20%    | Strong risk-adjusted return supports holding longer           |
+| Volatility | 20%    | Low-volatility stocks which tolerate longer holds             |
+| Beta       | 15%    | High beta amplifies market changes (suits shorter cycles)     |
+| Sharpe     | 20%    | Strong risk-adjusted return (longer holdings)                 |
 | Drawdown   | 15%    | Frequent deep drops shorten the safe holding window           |
-| Trend      | 15%    | Aligned SMA uptrend (price > 50-SMA > 200-SMA) supports long hold |
-| Momentum   | 15%    | Consistent multi-timeframe gains signal a durable move        |
+| Trend      | 15%    | Aligned SMA uptrend (price > 50-SMA > 200-SMA) (long hold)    |
+| Momentum   | 15%    | Consistent multi-timeframe gains, which signal a durable move |
 
 ---
 
-### 🏁 BUY/SKIP and HOLD DURATION (final verdict)
+### 🏁 BUY/SKIP and HOLD DURATION (final recommendation)
 
-The last block displays both recommendations side-by-side with their composite scores:
+The last output section indicates both recommendations side-by-side with their scores:
 
 ```
 ══════════════════════════════════════════════════════════════
@@ -194,120 +193,118 @@ The last block displays both recommendations side-by-side with their composite s
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Configuration of the scripts/Adjustments you can do
 
-Two constants at the top of `paco_stock_studio.py` can be adjusted without touching any logic:
+There are 2 constants at the top of the script that can be modified without affecting any logic:
 
 ```python
 RISK_FREE_RATE = 0.045   # risk-free rate used in Sharpe ratio (default: 4.5%)
-BENCHMARK      = "SPY"   # benchmark ticker for relative performance comparison
+BENCHMARK      = "SPY"   # benchmark ticker used for performance comparison
 ```
 
-Signal weights can also be tuned in the `WEIGHTS` (buy/skip) and `_HOLD_WEIGHTS` (hold duration) dictionaries. Each set must sum to 100.
+Signal weight variables can also be modified in the `WEIGHTS` (buy/skip) and `_HOLD_WEIGHTS` (hold duration) dictionaries. Important: each set must sum to 100.
 
 ---
 
-## 🎓 Learning Python with this project
+## 🎓 On to the fun... learning Python with this project
 
-This script is a great example to study if you are picking up Python. Every section uses real, practical patterns — not toy examples. Work through the topics below and use the code as a reference you can actually run and experiment with.
-
-Don't worry if you don't understand everything at once. Start with the fundamentals, run the script, change something small, and see what happens. That curiosity-driven tinkering is how most programmers learn best.
+For me, the intention to create this script is to learn two thihngs: python development and stock investments. 
+I believe this is a good example to study fundamentals python development patterns. This was a fun experience to code and experiment different topics in python development. The script has a lot of comments to help in understanding what each piece of code is doing.
+Feel free to copy the code, test and modify for your own experience. 
+Here, I am trying to describe what it is done in the script.
 
 ---
 
 ### 1. Python fundamentals
 
-These are the building blocks everything else is built on. You will find all of them somewhere in this script.
+These are the basic building blocks everything else is built on. All these are within the script.
 
 | Concept | Where to spot it in the code |
 |---|---|
-| Variables and constants | `RISK_FREE_RATE`, `BENCHMARK`, `WEIGHTS` — defined once at the top so they are easy to find and change |
+| Variables and constants | `RISK_FREE_RATE`, `BENCHMARK`, `WEIGHTS` — defined once at the top |
 | `if / elif / else` | Every `score_*` function — a number comes in, a label and score come out |
 | `for` loops | The `signal_rows` loop in `main()` builds the display table row by row |
 | Functions (`def`) | Each `compute_*`, `score_*`, and `_hold_score_*` is its own small, focused function |
-| Return values | Most functions return a `tuple` like `(0.85, "some explanation")` — a score plus a human-readable note |
-| f-strings | Used everywhere to embed values in text, e.g. `f"RSI {rsi:.1f} — oversold"` |
+| Return values | Most functions return a `tuple` like `(0.85, "some explanation")` — a score and a human-friendly note |
+| f-strings | Used everywhere in the script to embed values in text, e.g. `f"RSI {rsi:.1f} — oversold"` |
 | String methods | `.strip()`, `.upper()`, `.replace()` clean up user input and format labels |
 
-**Try it yourself:**
-- Change `RISK_FREE_RATE` from `0.045` to `0.02` and re-run the script. Does the Sharpe score change?
-- Write a tiny function that takes a grade (0–100) and returns `"Pass"` or `"Fail"` using `if/else`.
+**What can you change:**
+- Change `RISK_FREE_RATE` from `0.045` to `0.02` and re-run the script. Check if the Sharpe score change
 
 ---
 
-### 2. Data structures
+### 2. Data structures management
 
-Python gives you a few essential ways to group related data. This script uses all of them.
+Basic data management in python and different techniques.
 
-| Structure | What it looks like | Where to spot it |
+| Structure | What it looks like | Where to find it |
 |---|---|---|
-| List `[]` | An ordered collection you can loop over | `signal_rows`, `metrics`, `parts` — built up with `.append()` |
-| Dictionary `{}` | Key → value pairs, great for named settings | `WEIGHTS`, `scores`, `sub` — signal names mapped to their scores |
+| List `[]` | An ordered collection | `signal_rows`, `metrics`, `parts` — built up with `.append()` |
+| Dictionary `{}` | Key → value pairs | `WEIGHTS`, `scores`, `sub` — signal names mapped to their scores |
 | Tuple `()` | A fixed pair or group of values | Every `score_*` return: `(float, str)` — score plus description |
-| List comprehension | A compact one-liner loop that builds a list | `[v for v in (m1, m3, m6) if v is not None]` in `score_momentum()` |
+| List comprehension | A tiny loop that builds a list | `[v for v in (m1, m3, m6) if v is not None]` in `score_momentum()` |
 
-**Try it yourself:**
+**What can you change:**
 - Create a dictionary with three made-up signal names and weights, then compute a simple weighted average.
-- Rewrite one of the short `for` loops in the script as a list comprehension.
+- Modify one of the `for` loops in the script as a list comprehension.
 
 ---
 
 ### 3. Functions and type hints
 
-You will notice that function signatures in this script look like this:
+You will see across the script, that function signatures look something like this:
 
 ```python
 def momentum_return(prices: pd.Series, days: int) -> float | None:
     ...
 ```
 
-The `: pd.Series` and `-> float | None` parts are **type hints** — they tell you (and your editor) what type each argument should be and what the function will return. Python does not enforce them at runtime, but they make code much easier to read and catch mistakes before you even run anything.
+The `: pd.Series` and `-> float | None` parts are **type hints**.
 
-The `float | None` syntax (available in Python 3.10+) means the function might return a number, or it might return `None` if there is not enough data.
+The `float | None` syntax means the function might return a number or `None` if there is not enough data.
 
-**Try it yourself:**
-- Find a function in the script that is missing type hints and add them.
-- Write a function with a `str | None` return type that returns a string when given valid input and `None` otherwise.
+**What can you change:**
+- Add additional hints to functions in the script (not all of them have)
 
 ---
 
-### 4. Working with external libraries
+### 4. Working with different libraries
 
-One of Python's biggest strengths is its ecosystem of libraries. This script uses four:
+This script uses four different libraries. Pandas and Numpy are widely used:
 
 ```bash
 pip install yfinance pandas numpy tabulate
 ```
 
-| Library | What you learn from it |
+| Library | What you can learn from it |
 |---|---|
-| `yfinance` | How to pull data from an external API with one line of code |
-| `pandas` | The go-to tool for working with tables and time-series data |
-| `numpy` | Fast math on arrays — much quicker than writing loops by hand |
-| `tabulate` | Turning a plain list of lists into a nicely formatted table |
+| `yfinance` | Interact with an external API to get data with one line of code |
+| `pandas` | Widely used for data management and dataframes |
+| `numpy` | Fast math on arrays |
+| `tabulate` | Turning a plain list of lists into a 'pretty' formatted table |
 
-You do not need to understand every function in these libraries right away. Get comfortable reading their documentation and looking up what you need — that is a skill every developer uses daily.
+If you are not very familiar with these, I recommend to read their documentation and look for what you need.
 
-**Try it yourself:**
-- Open a Python shell and run `import yfinance as yf; print(yf.Ticker("AAPL").info)`. Explore the dictionary it returns.
-- Look up `pandas.DataFrame` and understand how it differs from `pd.Series`.
+**What can you do:**
+- Open a Python shell and run `import yfinance as yf; print(yf.Ticker("AAPL").info)`. You can check the dictionary that will return.
 
 ---
 
-### 5. pandas and time-series data
+### 5. pandas
 
-Almost all the number-crunching in this script happens on `pd.Series` objects — essentially a list of values with a date attached to each one. pandas makes common operations very concise:
+A lot of all the number-crunching in this script is done on `pd.Series` objects:
 
-| What you want | How pandas does it | Example from the code |
+| What you need | How pandas does it | Example from the code |
 |---|---|---|
 | Rolling average | `.rolling(n).mean()` | `close.rolling(50).mean()` — 50-day SMA |
 | Daily % change | `.pct_change()` | Used to compute daily returns |
 | Running high | `.cummax()` | Used inside the max-drawdown formula |
 | Filter by date | Boolean indexing | `bm_close[bm_close.index >= close.index[0]]` |
 | Most recent value | `.iloc[-1]` | Gets the last row of any series |
-| Drop missing values | `.dropna()` | Removes `NaN` rows before doing math |
+| Drop missing values | `.dropna()` | Removes `NaN` (missing values) rows before doing math |
 
-**Try it yourself:**
+**What can you change:**
 - Download a year of Apple data: `yf.Ticker("AAPL").history(period="1y")["Close"]`
 - Compute its 20-day rolling average and find the single highest closing price.
 
@@ -315,28 +312,28 @@ Almost all the number-crunching in this script happens on `pd.Series` objects �
 
 ### 6. User input and reading and writing files
 
-#### Asking the user a yes/no question
+#### Asking the user a yes/no question (user input)
 
-Before saving the report, the script uses the built-in `input()` function to ask whether the user wants a file:
+The script ask the user if they want to save the report, and before saving the report, the script uses the built-in `input()` function to request user input:
 
 ```python
-save = input("\nSave report to a text file? [y/N]: ").strip().lower()
+save = input("\nWould you like to save the report to a text file? [y/N]: ").strip().lower()
 if save not in ("y", "yes"):
-    print("Report not saved. Done.")
+    print("Report was not saved. Analysis is complete.")
     return
 ```
 
-A few things worth noticing here:
-- `input()` pauses execution, prints its argument as a prompt, and returns whatever the user typed as a string.
-- `.strip()` removes any accidental leading/trailing spaces or newline characters from the input.
+Some notes from this feature:
+- `input()` pauses execution, prints the argument as a prompt, and returns whatever the user typed as a string.
+- `.strip()` removes any leading/trailing spaces or newline characters from the input (cleaning the string).
 - `.lower()` converts the response to lowercase so `"Y"`, `"y"`, and `"yes"` all match the same condition.
-- The `return` statement exits `main()` immediately — a clean and readable way to bail out without deeply nested `else` blocks.
+- The `return` statement exits `main()` immediately — a clean and readable way to exit without deeply nested `else` blocks.
 
-This pattern — prompt → normalise → branch — is the standard recipe for any interactive yes/no question in a terminal script.
+This pattern is a standard for any interactive yes/no question in a terminal script.
 
-#### Writing the report file
+#### Writing the report into a file
 
-If the user confirms, the script saves the report using Python's built-in `open()`:
+Once the user select Yes, the script saves the report into a txtx file using Python's built-in `open()`:
 
 ```python
 with open(outfile, "w", encoding="utf-8") as fh:
@@ -344,12 +341,12 @@ with open(outfile, "w", encoding="utf-8") as fh:
 ```
 
 - `"w"` means *write mode* — it creates the file if it does not exist, or replaces it if it does.
-- `encoding="utf-8"` makes sure special characters (like the `═` border lines) are stored correctly.
+- `encoding="utf-8"` to make sure that special characters (like the `═` border lines) are stored correctly.
 - The `with` block automatically closes the file when it is done, even if something goes wrong — always use `with` when working with files.
 
-**Try it yourself:**
-- Add a second prompt that asks for a custom filename, and use that instead of the auto-generated one.
-- Change `"w"` to `"a"` (append mode) and run the script twice with the same ticker. Open the file — what happened?
+**What can you change:**
+- Add a second prompt that asks for a custom filename, and use that instead of the existing one.
+- Change `"w"` to `"a"` (append mode) and run the script twice with the same ticker. Open the file and check what happened.
 - Add a line to the file that records how many signals scored above 60.
 
 ---
@@ -367,20 +364,21 @@ args = parser.parse_args()
 
 - **Positional argument** (`ticker`) — provided by position: `python3 script.py AAPL`
 - **Optional flag** (`--period`) — provided by name: `python3 script.py AAPL --period 1y`
-- `nargs="?"` makes the positional argument optional (the script will ask for it interactively if omitted)
-- `default="2y"` is used when `--period` is not passed at all
+- `nargs="?"` makes the positional argument optional (the script will ask for it if not provided)
+- `default="2y"` is used when `--period` is not provided
 
-This pattern makes scripts far more flexible and reusable than hardcoding values.
+This pattern makes this script more flexible and reusable than hardcoding values.
 
-**Try it yourself:**
-- Add a `--output` flag that lets the user choose a custom filename for the report.
+**What can you change:**
+- Add a `--output` flag that lets the user type a custom filename for the report.
 - Add a `--no-file` flag using `action="store_true"` that skips saving the file entirely.
 
 ---
 
-### 8. Math and statistics in Python
+### 8. Math and statistics in Python. (the most complicated part for me...)
 
-The performance section translates standard finance formulas directly into Python expressions. You do not need a finance background to follow the pattern — each formula is just arithmetic:
+The performance section translates standard finance formulas directly into Python expressions. 
+You don't need to have a finance background to follow the pattern. Each formula is just arithmetic:
 
 | What it computes | The formula in code |
 |---|---|
@@ -389,17 +387,17 @@ The performance section translates standard finance formulas directly into Pytho
 | Sharpe ratio | `(ann_return - RISK_FREE_RATE) / ann_vol` |
 | Max drawdown | `((prices - prices.cummax()) / prices.cummax()).min()` |
 
-Notice how closely the code resembles the mathematical notation. This is one of Python's great strengths for data science work.
+The code try to resemble the mathematical notation, and that is one of Python's strengths.
 
-**Try it yourself:**
+**What can you change:**
 - Compute the Sharpe ratio by hand for a simple set of numbers and verify you get the same result as the script.
-- Try different values of `RISK_FREE_RATE` and observe how buy/skip scores shift.
+- Try different values of `RISK_FREE_RATE` and check how buy/skip scores change.
 
 ---
 
-### 9. Suggested learning path
+### 9. To continue learning.... 
 
-If you are brand new to Python and want to use this project as a guide, here is a sensible order to work through things:
+This is only my recommendation, to continue from here on a python deep dive:
 
 1. **Python basics** — variables, types, `if/else`, loops, functions
 2. **Data structures** — lists, dictionaries, tuples
@@ -411,14 +409,16 @@ If you are brand new to Python and want to use this project as a guide, here is 
 8. **Type hints** — making your function signatures self-documenting
 9. **APIs and JSON** — understanding how `yfinance` fetches and returns data
 
-You do not need to master each step before moving on. Come back to earlier topics as you encounter them in the code — the repetition will make them stick.
+As with everything, practice makes perfection. Repetition on these concepts will grow your learning.
 
 ---
 
-### 📚 Good places to keep learning
+### 📚 Some websites to keep learning
 
 - [Python official tutorial](https://docs.python.org/3/tutorial/) — clear, comprehensive, written by the people who built the language
 - [pandas getting started](https://pandas.pydata.org/docs/getting_started/index.html) — the "10 minutes to pandas" page is genuinely useful
 - [Real Python](https://realpython.com/) — practical, well-written tutorials on every topic above
 - [NumPy quickstart](https://numpy.org/doc/stable/user/quickstart.html) — a short intro to thinking in arrays
 - [yfinance documentation](https://ranaroussi.github.io/yfinance/) — see what data is available and how to fetch it
+- [Investopedia](https://www.investopedia.com/) — to find online financial resources and dictionaries
+- [finviz](https://finviz.com/) — web-based financial visualizations and stock screenings
